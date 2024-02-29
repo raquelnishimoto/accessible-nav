@@ -7,7 +7,8 @@ module.exports = {
   mode: prod ? 'production' : 'development',
   entry: './index.tsx',
   devServer: {
-    hot: true
+    hot: true,
+    client: { overlay: false },
   },
   output: {
     path: __dirname + '/dist/',
