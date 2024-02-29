@@ -1,12 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
+
+const sectionId = {
+    about: 'ABOUT',
+    contact: 'CONTACT',
+    workAndExperience: 'WORK_AND_EXPERIENCE'
+
+} as const;
+
+type SelectedItem = typeof sectionId[keyof typeof sectionId];
 
 export const AppNavBar = () => {
-    const sectionId = {
-        about: 'ABOUT',
-        contact: 'CONTACT',
-        workAndExperience: 'WORK_AND_EXPERIENCE'
+    const [selectedItem, setSelectedItem] = useState<SelectedItem>('ABOUT');
 
-    }
     const listItems = [
         { name: 'About me', id: sectionId.about },
         { name: 'Work and experience', id: sectionId.workAndExperience },
@@ -17,7 +22,14 @@ export const AppNavBar = () => {
         <nav>
             <ul>
                 {listItems.map(({ name, id }) => {
-                    return <li key={id}>{name}</li>
+                    return (
+                        <li
+                            key={id}
+                            className={selectedItem === id ? `nav-bar__item-selected` : ''}
+                        >
+                            {name}
+                        </li>
+                    );
                 })}
             </ul>
         </nav>

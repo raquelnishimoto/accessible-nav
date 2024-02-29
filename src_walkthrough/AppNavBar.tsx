@@ -1,12 +1,13 @@
 import React from "react";
 
-export const AppNavBar = () => {
-    const sectionId = {
-        about: 'ABOUT',
-        contact: 'CONTACT',
-        workAndExperience: 'WORK_AND_EXPERIENCE'
+const sectionId = {
+    about: 'ABOUT',
+    contact: 'CONTACT',
+    workAndExperience: 'WORK_AND_EXPERIENCE'
 
-    }
+} as const;
+
+export const AppNavBar = () => {
     const listItems = [
         { name: 'About me', id: sectionId.about },
         { name: 'Work and experience', id: sectionId.workAndExperience },
@@ -17,7 +18,15 @@ export const AppNavBar = () => {
         <nav>
             <ul>
                 {listItems.map(({ name, id }) => {
-                    return <li key={id}>{name}</li>
+                    return (
+                        <li key={id}>
+                            <a
+                                key={id}
+                                href={`#${id}`}
+                            />
+                            {name}
+                        </li>
+                    );
                 })}
             </ul>
         </nav>
