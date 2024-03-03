@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
-const sectionId = {
+export const sectionId = {
     about: 'ABOUT',
     contact: 'CONTACT',
     workAndExperience: 'WORK_AND_EXPERIENCE'
@@ -9,7 +9,11 @@ const sectionId = {
 
 type SelectedItem = typeof sectionId[keyof typeof sectionId];
 
-export const AppNavBar = () => {
+type Props = {
+    refs: React.MutableRefObject<(HTMLElement | null)[]>;
+};
+
+export const AppNavBar = ({ refs }: Props) => {
     const [selectedItem, setSelectedItem] = useState<SelectedItem>('ABOUT');
 
     const listItems = [
@@ -17,6 +21,28 @@ export const AppNavBar = () => {
         { name: 'Work and experience', id: sectionId.workAndExperience },
         { name: 'Contact', id: sectionId.contact },
     ];
+
+    useEffect(() => {
+        const sectionRefs = refs?.current;
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    setSelectedItem(entry.target.id as SelectedItem);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        sectionRefs.forEach((section) => {
+            observer.observe(section as Element);
+        });
+
+        return () => {
+            sectionRefs.forEach((section) => {
+                observer.unobserve(section as Element);
+            });
+        }
+    }, []);
 
     return (
         <nav>
@@ -26,8 +52,11 @@ export const AppNavBar = () => {
                         <li
                             key={id}
                             className={selectedItem === id ? `nav-bar__item-selected` : ''}
+                            onClick={() => setSelectedItem(id)}
                         >
-                            {name}
+                            <a href={`#${id}`} >
+                                {name}
+                            </a>
                         </li>
                     );
                 })}

@@ -1,19 +1,22 @@
-import { AboutSection } from './AboutSection';
 import './App.scss';
-import React from 'react';
+
+import { AboutSection } from './AboutSection';
+import React, { useRef } from 'react';
 import { ContactSection } from './ContactSection';
 import { WorkAndExperienceSection } from './WorkAndExperienceSection';
 import { AppNavBar } from './AppNavBar';
 
 export const App = () => {
+  const sectionRefs = useRef<(HTMLElement|null)[]>([]);
+
   return (
     <>
-      <AppNavBar />
-      <AboutSection />
+      <AppNavBar refs={sectionRefs}/>
+      <AboutSection refs={(ref) => sectionRefs.current.push(ref)}/>
       <hr />
-      <WorkAndExperienceSection />
+      <WorkAndExperienceSection refs={(ref) => sectionRefs.current.push(ref)}/>
       <hr />
-      <ContactSection />
+      <ContactSection refs={(ref) => sectionRefs.current.push(ref)}/>
     </>
   );
 };
